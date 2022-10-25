@@ -1,0 +1,26 @@
+body#tinymce h1,
+body#tinymce h2,
+body#tinymce h3,
+body#tinymce h4,
+body#tinymce h5,
+body#tinymce h6{
+    font-weight: 700!important;
+}
+body#tinymce.wp-editor h1 strong,
+body#tinymce.wp-editor h2 strong,
+body#tinymce.wp-editor h3 strong,
+body#tinymce.wp-editor h4 strong,
+body#tinymce.wp-editor h5 strong,
+body#tinymce.wp-editor h6 strong,
+body#tinymce.wp-editor h1 b,
+body#tinymce.wp-editor h2 b,
+body#tinymce.wp-editor h3 b,
+body#tinymce.wp-editor h4 b,
+body#tinymce.wp-editor h5 b,
+body#tinymce.wp-editor h6 b{
+    font-weight: 900!important;
+}
+.dataTables_length,
+.dataTables_filter {
+    margin-bottom: 10px;
+}

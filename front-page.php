@@ -1,0 +1,1 @@
+<?php wp_redirect( 'https://getwebinc.com/', 301 ); exit; ?>
