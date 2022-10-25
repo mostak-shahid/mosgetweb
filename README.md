@@ -69,3 +69,47 @@ add_shortcode( 'mos-button', 'mos_button_fnc' );
        });
 })();
 ```
+**Rest API**
+```
+add_action( 'rest_api_init', 'fr_any_post_api_route' );
+function fr_any_post_api_route() {
+    register_rest_route( 'fr-all-url-api-route/v2', '/any-post-type/', array(
+        'methods' => 'GET',
+        'callback' => 'fr_get_content_by_slug',
+        'args' => array()
+    ) );
+}
+```
+```
+function fr_get_content_by_slug() {
+    $page_on_front = get_option( 'page_on_front' );
+    $args = array(
+        'post_type' => array( 'page', 'post' ),
+        'post_status' => 'publish',
+        'nopaging' => true,
+        'orderby'   => 'meta_value',
+        'order' => 'ASC',
+    );
+    $query = new WP_Query( $args );
+    $posts = $query->get_posts();
+    $output = array();
+    $n = 0;
+    foreach ( $posts as $post ) {
+        $output[$n] = array(
+            'id' => $post->ID,
+            'modified' => $post->post_modified
+        );
+        if ( get_post_type( $post->ID ) == 'post' ) {
+            $output[$n]['title'] = 'blog/'.$post->post_name;
+        } else {
+            $output[$n]['title'] = $post->post_name;
+        }
+
+        if ( $post->ID == $page_on_front ) {
+            $output[$n]['title'] = '';
+        }
+        $n++;
+    }
+    wp_send_json( $output );
+}
+```
