@@ -11,7 +11,7 @@ add_action( 'admin_init', 'mosgetweb_theme_add_editor_styles' );
 ```
  
 **Add editor button**
-######function.php
+###### function.php
 ```
 // hooks your functions into the correct filters
 function mos_add_mce_button() {
@@ -54,7 +54,7 @@ function mos_button_fnc( $atts = array(), $content = '' ) {
 }
 add_shortcode( 'mos-button', 'mos_button_fnc' );
 ```
-######mos-mce-button.js
+###### mos-mce-button.js
 ```
 (function() {
        tinymce.PluginManager.add('mos_mce_button', function( editor, url ) {
