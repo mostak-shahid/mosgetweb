@@ -15,7 +15,6 @@ function mosgetweb_enqueue_scripts () {
 add_action( 'wp_enqueue_scripts', 'mosgetweb_enqueue_scripts' );
 
 function mosgetweb_admin_enqueue_scripts () {
-
     wp_register_style( 'admin-style', get_template_directory_uri() . '/admin-style.css' );
     wp_enqueue_style( 'admin-style' );
 }
@@ -28,7 +27,6 @@ add_action( 'admin_init', 'mosgetweb_theme_add_editor_styles' );
 
 /**/
 // hooks your functions into the correct filters
-
 function mos_add_mce_button() {
     // check user permissions
     if ( !current_user_can( 'edit_posts' ) &&  !current_user_can( 'edit_pages' ) ) {
@@ -68,7 +66,10 @@ function mos_button_fnc( $atts = array(), $content = '' ) {
     return $html;
 }
 add_shortcode( 'mos-button', 'mos_button_fnc' );
-
+// Disable WordPress sanitization to allow more than just $allowedtags from /wp-includes/kses.php.
+remove_filter( 'pre_user_description', 'wp_filter_kses' );
+// Add sanitization for WordPress posts.
+add_filter( 'pre_user_description', 'wp_filter_post_kses' );
 
 if ( ! function_exists( 'mosgetweb_setup' ) ) :
 
@@ -100,14 +101,12 @@ add_action( 'after_setup_theme', 'mosgetweb_setup' );
 //Sitemap
 
 add_action( 'rest_api_init', 'fr_any_post_api_route' );
-
 function fr_any_post_api_route() {
     register_rest_route( 'fr-all-url-api-route/v2', '/any-post-type/', array(
         'methods' => 'GET',
         'callback' => 'fr_get_content_by_slug',
         'args' => array()
     ) );
-
 }
 
 /**
@@ -120,9 +119,7 @@ function fr_any_post_api_route() {
 //callback function
 
 function fr_get_content_by_slug() {
-
     $page_on_front = get_option( 'page_on_front' );
-    //get_post_type( get_the_ID() )
     $args = array(
         'post_type' => array( 'page', 'post' ),
         'post_status' => 'publish',
@@ -131,18 +128,12 @@ function fr_get_content_by_slug() {
         'order' => 'ASC',
     );
     $query = new WP_Query( $args );
-    // $query is the WP_Query Object
     $posts = $query->get_posts();
-    // $posts contains the post objects
-
     $output = array();
     $n = 0;
     foreach ( $posts as $post ) {
-        // Pluck the id and title attributes
-
         $output[$n] = array(
             'id' => $post->ID,
-            //'title' => $post->post_name,
             'modified' => $post->post_modified
         );
         if ( get_post_type( $post->ID ) == 'post' ) {
@@ -157,6 +148,4 @@ function fr_get_content_by_slug() {
         $n++;
     }
     wp_send_json( $output );
-    // getting data in json format.
-
 }
