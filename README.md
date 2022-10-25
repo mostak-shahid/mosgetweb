@@ -4,7 +4,7 @@
 ### Functions are used
 - Add editor style
 - Add editor button
-- Rest API
+- Rest API  
 **Add editor style**
 ```
 function mosgetweb_theme_add_editor_styles() {
